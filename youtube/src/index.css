@@ -1,0 +1,5 @@
+/* wont touch css files now at all  */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities; 

@@ -1,0 +1,128 @@
+<!-- https://radiant-hotteok-4cefae.netlify.app --> youtube deployed link
+
+
+npx create-react-app has created everything for us like package.json , jest and everything 
+first thing we will setup our tailwind =   no need of post css now as npx create-react-app takes care of it 
+                npm install -D tailwindcss
+                2. create config = npx tailwindcss init  == it will initialize us with the tailwind.config.js to tell tailwind the files we need to track , all files in src having extensions of .js,.html files 
+                3. change the css file according to tailwind css using utilities, components and base , and will leave it forever like this 
+
+                create all the components one by one 
+                                /*
+                                Head
+                                Body 
+                                    sidebar 
+                                         menu items
+                                    main container 
+                                    buttons list 
+                                    video container 
+                                        video card 
+                                */
+to collapse the side bar we need to keep it in the global space in a redux store and now install redux toolkit 
+creaet utils and create store in utils ....then we will create a slice - appSlice
+then we will link give slice to our store 
+then we will provide store to the app using component Provider and wrap App.js in Provider 
+now we need to check wether store is working fine or not by using a useSelector 
+now we will try to toggle state from head component we will use the togglemenuhandler  
+we will use an onClick button and set the state accordingly which will change state of togglemenu from true to false 
+now our task would be to change the side bar to hide it and show it when needed 
+now to change the sidebar according to the button we need to subscribe to our store 
+now we will make button and to make button we will use button list , for getting button list we will use one button component again and again and then pass the props for different names 
+after getting names on the screen we need to discuss with the interviewer through what can we manage the data hard coded data or an api
+here we are doing api and we wont get cors this time as youtube gives apis without any access issue 
+we will use utube vidoes apis and keep in constant.js file , this api will take ours key so we need to use our own api key for it 
+after using the utube api and api key we will have to make an api call in video container with use Effect hook 
+after we have called the api we need a state variable to loop on the videos on the main page so that it triggers the reconciliation process while fetching the data from API 
+now we will make a video card component to get data from the video api 
+once we have fetched one video details from the api we will iterate over the whole list of videos using the map function 
+after using the map and key function we have got only 5 videos so we will load more data 
+after seeign the apis page we got we can by default load 5 , max we can load 50 and then here we will load 15 and also change the video code to IN from US 
+now we will build watch page but before watch page we will make our routing , now we will install react-router-dom 
+then we will createBrowser in App.js which takes array of paths which have an object 
+now for routing we will render our body if the path is "/" and we will provide our appRouter below in the app to the provider
+our body has two children which is sidebar and the maincontainer.....so when the page the maincontainer is replaced by the watch-page 
+we should collapse side bar on the side when we go the watch page on it's own so we need to dispatch an action in useEffect in watchpage 
+to build watch page we need to read id and build what we have using useParams , as the params will be missing the "/" so we will be using the useSearchParams like a useState 
+
+----------chapter - 15-------------------
+
+----------higher order components----------
+function takes a component and returns a new component 
+
+-------search bar------------
+nested comments 
+search bar 
+build a search bar an important interview question = search is the most important thing 
+when we start typing we will call a search in the console networks in each and every key press 
+when we are typing very fast , it mde 3 api calls for 7 keystrokes 
+when we do something very fast it skips some of the events and the difference between key strokes is very less so it will skip the api call = debouncing 
+when we type something slowly it made api calls for each and every key press 
+debouncing says = if we are typing very fast the dff between 2 key strokes is very high but if i am typing fast the diff between key stroke would be very fast , when use is typing fast user does not need many suggestions 
+without debouncing we made around 10000 api calls but with debouncing we will make only 2 or 3 api calls 
+in flipkart debouncing is applied with 200ms < decline the api calls    
+                                                 200ms > makes an api call        
+we will search youtube search suggestion api and store it in the constants as an api 
+then we will put debouncing to build our search bar work , to make it work we need to tie to state variable 
+before debouncing the state will make multiple api calls , to avoid it we will add debouncer to it in useEffect as we make api call in there .....need to make an api call only when the difference between the two strokes is greater then 200 ms 
+to decline an api call if the difference crosses 200ms we will use setTimeout function in the getSuggesctionsearch function the api call 
+to render all the suggestions i will take into a state variable and map all the list items to the usggestions with the {s} key into it 
+the search options are coming even when we are not focusing on it , so we need to focus on the search bar and blur when we are not focusing 
+------------building a new feature---------------
+optimizing event call further as we are again making api calls while going back , flipkart is making backward search but ututbe not making it 
+building this feature by using the power of redux , while searching will make app by using redux 
+here we will create a new slice inside a store 
+cache: 
+  time complexity to search in an array = O(n)
+  time complexity  to search in Object  = O(1)
+  we can also sue new Map(); to seach inside object in more optimized way 
+
+after removing it is not making an api call 
+we can even develop a LRU cache = least recently used 
+---------------making comment section------------
+making ensted comments just like reddit , which becomes a pyramid of doom 
+creating mock data for n level nested data 
+adding comments to the page , add css, then add commentsdata to structure the whole data 
+
+
+<!-- building live chat in the utube watchpage -->
+also teaching pagination  <<<<<<<<< infinite scroll
+ challenges of live chat  - > to get data live and give better user experience  - data layer
+                          - > to update the data on page, update the UI  - UI layer 
+2 ways to handle live data = 1. web sockets - kind of handshake between UI and servers so we can quickly send   data from each side in any direction, no regular interval here, send data anytime they want to and initial connection takes time, stock market apps falls web sockets, what'sapp falls under this category , time critical applications falls under this category, where we exactly see the time stamps we need the web sockets                     
+                              2. API polling - UI request the server and data flows from server to UI (one directional) after an interval, UI will keep polling data after 10 second or after 1 second , gmail falls in api polling 
+--> cricbuzz is api polling as it getting the commentary after each 25 seconds 
+--> youtube uses api polling in the live chat scenario , making api calls without getting explode so we will make this similar feature , the utube live page is not freezing because as soon as the messages explode from a certain number it quickly deletes the message after a certain point(like after 100 to 200 messages), this number also changes if we use different browsers or systems for different configurations 
+to count messsages in the youtube live chat we can use query selector == document.getElementsByTagName("yt-live-chat-text-message-rerenderer").length == gives us the number of all the queries in the live chat (which are present there but not cleared) as after a while youtube removes message from the top 
+<!-- building the live chat feature (ocding part) -->
+to put data in the live chat we will use the redux store and create slices to append it to our chat 
+for using redux
+===create a sice 
+=== add slice to the store 
+=== and the dispatch an action 
+=== subscribe the store   
+to optimize the live chat we need to remove the old messages and optimize our chat we need to make changes in our slice and splice the messages accordingly 
+<!-- build feature for user to add messages in the live chat -->
+to create a feature to hit enter and the things should get uploaded to the live chat we need to wrap the whole code inside a form 
+now to add the message to the live chat and update the live chat we need to use redux concept 
+----need to dispatch an action which will call the reducer which will update the slice of the store and because this chat container is subscribed to the store it will automagically update it 
+
+<!-- using useMemo -->
+hook thats let's us cache the result of calculations between re-renders 
+------ a component rerenders when there is a sate change 
+it also gives u some dependiceis which is here text , until the dependecies changes it memoizes the cache results
+just by adding the memoizing the function the toggling is done in the proper way 
+just a way to stop lagging of application 
+
+<!-- useCallback hook -->
+caching a fucntion definition between rerenders 
+const cachedFn = useCallback(fn,dependencies)
+skipping rerenders and many more
+
+
+<!-- useRef -->
+.....we want a value in the component but we dont the value to rerender 
+lets you reference a value that is not needed for rendering 
+const ref = useRef(initialValue)
+referecnign a value with a ref, manipulating DOM with a ref value, avoiding creating the ref contents  
+ref is like an object, when we do a ref of useref it does not give us a variable like ref 
+not like ref = 0 but behaves like ref = object
